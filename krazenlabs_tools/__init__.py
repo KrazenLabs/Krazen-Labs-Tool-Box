@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Krazen Labs Tool Box",
     "author": "Krazen Labs (krazenlabs.com)",
-    "version": (1, 0),
+    "version": (1, 1),
     "blender": (3, 5, 1),
     "location": "View3D > Sidebar > Krazen Labs Tab",
     "description": "A collection of tools to aid in the creation of 3d avatars.",
