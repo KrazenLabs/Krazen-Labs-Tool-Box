@@ -13,3 +13,7 @@ This is a direct implementation from my revised stand-alone Unity FBX Exporter: 
 Don't forget to set your export preferences in the scene properties.
 
 The UI is found in the addon panel in the 3D view by pressing N, look for the tab labeled "Krazen Labs".
+
+## Substance Painter FBX Exporter (experimental)
+
+Really just the same thing as the Unity one, but you get to provide different export locations and names so you can easily push your model into both applications. Might receive some actually different functionality in the future.
