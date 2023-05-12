@@ -242,117 +242,22 @@ def export_unity_fbx(context, filepath, active_collection, selected_objects, def
 
 # ExportHelper is a helper class, defines filename and
 # invoke() function which calls the file selector.
-from bpy_extras.io_utils import ExportHelper
-from bpy.props import StringProperty, BoolProperty, EnumProperty
 from bpy.types import Operator
 
 
-class ExportUnityFbx(Operator, ExportHelper):
+class ExportUnityFbx(Operator):
     """FBX exporter compatible with Unity's coordinate and scaling system"""
     bl_idname = "export_scene.unity_fbx"
     bl_label = "Export Unity FBX"
     bl_options = {'UNDO_GROUPED'}
 
-    # ExportHelper mixin class uses this
-    filename_ext = ".fbx"
-
-    filter_glob: StringProperty(
-        default="*.fbx",
-        options={'HIDDEN'},
-        maxlen=255,  # Max internal buffer length, longer would be clamped.
-    )
-
-    # List of operator properties, the attributes will be assigned
-    # to the class instance from the operator settings before calling.
-
-    active_collection: BoolProperty(
-        name="Active Collection Only",
-        description="Export objects in the active collection only (and its children). May be combined with Selected Objects Only.",
-        default=False,
-    )
-
-    selected_objects: BoolProperty(
-        name="Selected Objects Only",
-        description="Export selected objects only. May be combined with Active Collection Only.",
-        default=False,
-    )
-
-    deform_bones: BoolProperty(
-        name="Only Deform Bones",
-        description="Only write deforming bones (and non-deforming ones when they have deforming children)",
-        default=False,
-    )
-
-    leaf_bones: BoolProperty(
-        name="Add Leaf Bones",
-        description="Append a final bone to the end of each chain to specify last bone length (use this when you intend to edit the armature from exported data)",
-        default=False,
-    )
-
-    primary_bone_axis: EnumProperty(
-        name="Primary Bone Axis",
-        items=(('X', "X Axis", ""),
-               ('Y', "Y Axis", ""),
-               ('Z', "Z Axis", ""),
-               ('-X', "-X Axis", ""),
-               ('-Y', "-Y Axis", ""),
-               ('-Z', "-Z Axis", ""),
-               ),
-        default='Y',
-    )
-    secondary_bone_axis: EnumProperty(
-        name="Secondary Bone Axis",
-        items=(('X', "X Axis", ""),
-               ('Y', "Y Axis", ""),
-               ('Z', "Z Axis", ""),
-               ('-X', "-X Axis", ""),
-               ('-Y', "-Y Axis", ""),
-               ('-Z', "-Z Axis", ""),
-               ),
-        default='X',
-    )
-
-    # Custom draw method
-    # https://blender.stackexchange.com/questions/55437/add-gui-elements-to-exporter-window
-    # https://docs.blender.org/api/current/bpy.types.UILayout.html
-
-    def draw(self, context):
-        layout = self.layout
-        row = layout.row()
-        row.label(text="Selection")
-        row = layout.row()
-        row.prop(self, "active_collection")
-        row = layout.row()
-        row.prop(self, "selected_objects")
-        row = layout.row()
-        row.label(text="Armatures")
-        row = layout.row()
-        row.prop(self, "deform_bones")
-        row = layout.row()
-        row.prop(self, "leaf_bones")
-        row = layout.row()
-        row.label(text="Bone Axes")
-        row = layout.row()
-        row.prop(self, "primary_bone_axis")
-        row = layout.row()
-        row.prop(self, "secondary_bone_axis")
-
     def execute(self, context):
         # Get the export path and file name from the current scene.
-        export_path = context.scene.export_path
-        export_file_name = context.scene.export_file_name
+        export_path = context.scene.unity_export_path
+        export_file_name = context.scene.unity_export_file_name
         # Combine the export path with the file name to get the full path.
         full_path = os.path.join(export_path, export_file_name)
-        return export_unity_fbx(context, full_path, self.active_collection,
+        return export_unity_fbx(context, full_path, context.scene.active_collection,
                                 context.scene.selected_objects, context.scene.deform_bones,
-                                context.scene.leaf_bones, self.primary_bone_axis,
-                                self.secondary_bone_axis)
-
-    def invoke(self, context, event):
-        # Get the export path and file name from the current scene.
-        export_path = context.scene.export_path
-        export_file_name = context.scene.export_file_name
-        # Combine the export path with the file name to get the full path.
-        full_path = os.path.join(export_path, export_file_name)
-        self.filepath = full_path
-        return self.execute(context)
+                                context.scene.leaf_bones, context.scene.primary_bone_axis,
+                                context.scene.secondary_bone_axis)
