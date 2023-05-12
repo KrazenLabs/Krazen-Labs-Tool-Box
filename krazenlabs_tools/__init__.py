@@ -15,7 +15,7 @@ import bpy
 from .operators.join_meshes import KRAZENLABS_OT_join_meshes
 from .ui.panel import KRAZENLABS_PT_panel
 from .ui.scene_properties import KRAZENLABS_PT_export_properties_panel
-from .operators.unity_fbx import ExportUnityFbx
+from .operators.unity_fbx import ExportUnityFbx, ExportSubstanceFbx
 
 
 def register():
@@ -23,7 +23,7 @@ def register():
     bpy.utils.register_class(KRAZENLABS_PT_panel)
     bpy.utils.register_class(KRAZENLABS_PT_export_properties_panel)
     bpy.utils.register_class(ExportUnityFbx)
-
+    bpy.utils.register_class(ExportSubstanceFbx)
 
 
 def unregister():
@@ -31,6 +31,7 @@ def unregister():
     bpy.utils.unregister_class(KRAZENLABS_PT_panel)
     bpy.utils.unregister_class(KRAZENLABS_PT_export_properties_panel)
     bpy.utils.unregister_class(ExportUnityFbx)
+    bpy.utils.unregister_class(ExportSubstanceFbx)
 
 
 

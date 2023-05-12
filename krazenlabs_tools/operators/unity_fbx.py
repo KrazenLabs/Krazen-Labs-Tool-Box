@@ -245,6 +245,25 @@ def export_unity_fbx(context, filepath, active_collection, selected_objects, def
 from bpy.types import Operator
 
 
+def start_export(call_operator, context, export_target):
+    # Get the export path and file name from the current scene.
+    if export_target == "unity":
+        export_path = context.scene.unity_export_path
+        export_file_name = context.scene.unity_export_file_name
+    elif export_target == "substance":
+        export_path = context.scene.substance_export_path
+        export_file_name = context.scene.substance_export_file_name
+    else:
+        call_operator.report({'WARNING'}, "No valid export target was given.")
+        return {'CANCELLED'}
+    # Combine the export path with the file name to get the full path.
+    full_path = os.path.join(export_path, export_file_name)
+    return export_unity_fbx(context, full_path, context.scene.active_collection,
+                            context.scene.selected_objects, context.scene.deform_bones,
+                            context.scene.leaf_bones, context.scene.primary_bone_axis,
+                            context.scene.secondary_bone_axis)
+
+
 class ExportUnityFbx(Operator):
     """FBX exporter compatible with Unity's coordinate and scaling system"""
     bl_idname = "export_scene.unity_fbx"
@@ -252,12 +271,14 @@ class ExportUnityFbx(Operator):
     bl_options = {'UNDO_GROUPED'}
 
     def execute(self, context):
-        # Get the export path and file name from the current scene.
-        export_path = context.scene.unity_export_path
-        export_file_name = context.scene.unity_export_file_name
-        # Combine the export path with the file name to get the full path.
-        full_path = os.path.join(export_path, export_file_name)
-        return export_unity_fbx(context, full_path, context.scene.active_collection,
-                                context.scene.selected_objects, context.scene.deform_bones,
-                                context.scene.leaf_bones, context.scene.primary_bone_axis,
-                                context.scene.secondary_bone_axis)
+        export_target = "unity"
+        return start_export(self, context, export_target)
+
+class ExportSubstanceFbx(Operator):
+    bl_idname = "export_scene.substance_fbx"
+    bl_label = "Export Substance FBX"
+    bl_options = {'UNDO_GROUPED'}
+
+    def execute(self, context):
+        export_target = "substance"
+        return start_export(self, context, export_target)

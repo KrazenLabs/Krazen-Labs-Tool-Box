@@ -17,6 +17,22 @@ bpy.types.Scene.unity_export_file_name = bpy.props.StringProperty(
     subtype='FILE_NAME'
 )
 
+bpy.types.Scene.substance_export_path = bpy.props.StringProperty(
+    name="Substance Export Path",
+    description="Path to export FBX files to",
+    default="",
+    maxlen=1024,
+    subtype='DIR_PATH'
+)
+
+bpy.types.Scene.substance_export_file_name = bpy.props.StringProperty(
+    name="Substance Export File Name",
+    description="Name of the exported file",
+    default="my_export.fbx",
+    maxlen=1024,
+    subtype='FILE_NAME'
+)
+
 bpy.types.Scene.selected_objects = bpy.props.BoolProperty(
     name="Selected Objects Only",
     description="Export selected objects only. May be combined with Active Collection Only.",
@@ -79,6 +95,8 @@ class KRAZENLABS_PT_export_properties_panel(bpy.types.Panel):
 
         layout.prop(scene, "unity_export_path")
         layout.prop(scene, "unity_export_file_name")
+        layout.prop(scene, "substance_export_path")
+        layout.prop(scene, "substance_export_file_name")
         layout.prop(scene, "active_collection")
         layout.prop(scene, "selected_objects")
         layout.prop(scene, "deform_bones")
