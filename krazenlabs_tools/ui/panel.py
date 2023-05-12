@@ -10,3 +10,4 @@ class KRAZENLABS_PT_panel(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         layout.operator("kl_tools.join_meshes")
+        layout.operator("export_scene.unity_fbx")
