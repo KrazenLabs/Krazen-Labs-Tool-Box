@@ -1,16 +1,16 @@
 import bpy
 
 # Define scene properties
-bpy.types.Scene.export_path = bpy.props.StringProperty(
-    name="Export Path",
+bpy.types.Scene.unity_export_path = bpy.props.StringProperty(
+    name="Unity Export Path",
     description="Path to export FBX files to",
     default="",
     maxlen=1024,
     subtype='DIR_PATH'
 )
 
-bpy.types.Scene.export_file_name = bpy.props.StringProperty(
-    name="Export File Name",
+bpy.types.Scene.unity_export_file_name = bpy.props.StringProperty(
+    name="Unity Export File Name",
     description="Name of the exported file",
     default="my_export.fbx",
     maxlen=1024,
@@ -67,7 +67,7 @@ bpy.types.Scene.secondary_bone_axis = bpy.props.EnumProperty(
 
 # Panel class
 class KRAZENLABS_PT_export_properties_panel(bpy.types.Panel):
-    bl_label = "Unity Export Settings"
+    bl_label = "FBX Export Settings"
     bl_idname = "KRAZENLABS_PT_export_properties_panel"
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
@@ -77,8 +77,8 @@ class KRAZENLABS_PT_export_properties_panel(bpy.types.Panel):
         layout = self.layout
         scene = context.scene
 
-        layout.prop(scene, "export_path")
-        layout.prop(scene, "export_file_name")
+        layout.prop(scene, "unity_export_path")
+        layout.prop(scene, "unity_export_file_name")
         layout.prop(scene, "active_collection")
         layout.prop(scene, "selected_objects")
         layout.prop(scene, "deform_bones")
